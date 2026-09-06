@@ -1,26 +1,299 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Cukuraja — Soft UI profesional
+ * Biru brand tetap, tanpa glow/neon/orb gradient.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.75rem;
+
+  --background: #f0f9ff;
+  --foreground: #0f172a;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  --primary: #0369a1;
+  --primary-foreground: #ffffff;
+  --primary-dark: #075985;
+
+  --secondary: #e0f2fe;
+  --secondary-foreground: #0c4a6e;
+
+  --accent: #047857;
+  --accent-foreground: #ffffff;
+
+  --muted: #eef6fb;
+  --muted-foreground: #64748b;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --border: #d6e8f4;
+  --input: #cfe0ec;
+  --ring: #0369a1;
+
+  --surface: #ffffff;
+  --surface-raised: #f5faff;
+
+  --chart-1: #0369a1;
+  --chart-2: #047857;
+  --chart-3: #0ea5e9;
+  --chart-4: #475569;
+  --chart-5: #ca8a04;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #0369a1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eef6fb;
+  --sidebar-accent-foreground: #0c4a6e;
+  --sidebar-border: #d6e8f4;
+  --sidebar-ring: #0369a1;
+
+  --status-booked: #0369a1;
+  --status-booked-bg: #e0f2fe;
+  --status-checked-in: #0e7490;
+  --status-checked-in-bg: #cffafe;
+  --status-waiting: #b45309;
+  --status-waiting-bg: #fef3c7;
+  --status-called: #475569;
+  --status-called-bg: #f1f5f9;
+  --status-serving: #1e3a5f;
+  --status-serving-bg: #e2e8f0;
+  --status-completed: #047857;
+  --status-completed-bg: #d1fae5;
+  --status-skipped: #b45309;
+  --status-skipped-bg: #fef3c7;
+  --status-cancelled: #b91c1c;
+  --status-cancelled-bg: #fee2e2;
+
+  --shadow-soft-sm: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-soft-md: 0 4px 10px rgb(15 23 42 / 0.06);
+  --shadow-soft-lg: 0 10px 20px rgb(15 23 42 / 0.07);
+  --shadow-soft-xl: 0 18px 30px rgb(15 23 42 / 0.08);
+}
+
+.dark {
+  --background: #0b1220;
+  --foreground: #e8eef5;
+
+  --card: #121a2a;
+  --card-foreground: #e8eef5;
+  --popover: #121a2a;
+  --popover-foreground: #e8eef5;
+
+  --primary: #38bdf8;
+  --primary-foreground: #082f49;
+  --primary-dark: #0ea5e9;
+
+  --secondary: #1a2740;
+  --secondary-foreground: #bae6fd;
+
+  --accent: #34d399;
+  --accent-foreground: #064e3b;
+
+  --muted: #152033;
+  --muted-foreground: #94a3b8;
+
+  --destructive: #f87171;
+  --destructive-foreground: #450a0a;
+
+  --border: #243247;
+  --input: #2a3b52;
+  --ring: #38bdf8;
+
+  --surface: #121a2a;
+  --surface-raised: #162033;
+
+  --chart-1: #38bdf8;
+  --chart-2: #34d399;
+  --chart-3: #7dd3fc;
+  --chart-4: #94a3b8;
+  --chart-5: #fbbf24;
+
+  --sidebar: #0b1220;
+  --sidebar-foreground: #e8eef5;
+  --sidebar-primary: #38bdf8;
+  --sidebar-primary-foreground: #082f49;
+  --sidebar-accent: #1a2740;
+  --sidebar-accent-foreground: #bae6fd;
+  --sidebar-border: #243247;
+  --sidebar-ring: #38bdf8;
+
+  --status-booked: #7dd3fc;
+  --status-booked-bg: #0c3550;
+  --status-checked-in: #67e8f9;
+  --status-checked-in-bg: #0b3b45;
+  --status-waiting: #fcd34d;
+  --status-waiting-bg: #422c06;
+  --status-called: #cbd5e1;
+  --status-called-bg: #1e293b;
+  --status-serving: #e2e8f0;
+  --status-serving-bg: #334155;
+  --status-completed: #6ee7b7;
+  --status-completed-bg: #06342a;
+  --status-skipped: #fcd34d;
+  --status-skipped-bg: #422c06;
+  --status-cancelled: #fca5a5;
+  --status-cancelled-bg: #450d0d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  --shadow-soft-sm: var(--shadow-soft-sm);
+  --shadow-soft-md: var(--shadow-soft-md);
+  --shadow-soft-lg: var(--shadow-soft-lg);
+  --shadow-soft-xl: var(--shadow-soft-xl);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 18%, transparent);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .surface-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft-sm);
+  }
+
+  .surface-card-hover {
+    transition: box-shadow 200ms ease, border-color 200ms ease;
+  }
+
+  .surface-card-hover:hover {
+    box-shadow: var(--shadow-soft-md);
+    border-color: color-mix(in oklab, var(--primary) 22%, var(--border));
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-slim {
+    scrollbar-width: thin;
+    scrollbar-color: var(--input) transparent;
+  }
+
+  .scrollbar-slim::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .scrollbar-slim::-webkit-scrollbar-thumb {
+    background: var(--input);
+    border-radius: 9999px;
+  }
+
+  .bg-grid-soft,
+  .bg-grid-editorial {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
