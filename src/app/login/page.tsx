@@ -117,47 +117,47 @@ function LoginForm() {
     <Reveal className="w-full max-w-[26rem]">
       <Link
         href="/"
-        className="mb-8 inline-flex items-center gap-2 rounded-xl border border-border bg-card/90 px-3.5 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-soft-sm)] transition hover:bg-muted"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
-        <ArrowLeft className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+        <ArrowLeft className="h-4 w-4 text-primary" aria-hidden />
         Kembali ke beranda
       </Link>
 
-      <div className="text-center">
-        <BrandMark href="/" size="lg" />
-        <h1 className="mt-6 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-[1.65rem]">
-          Masuk ke {BRAND_NAME}
-        </h1>
-        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
-          {redirectTo
-            ? "Login diperlukan untuk melanjutkan booking."
-            : registeredBusiness
-              ? "Akun siap. Masuk untuk membuka dashboard."
-              : "Gunakan email dan password akun Anda untuk membuka dashboard."}
-        </p>
-      </div>
-
-      {registeredBusiness && (
-        <div className="mt-4 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground">
-          Akun owner berhasil dibuat
-          {registeredSlug ? (
-            <>
-              . Halaman publik:{" "}
-              <Link
-                href={`/${registeredSlug}`}
-                className="font-medium text-primary underline-offset-4 hover:underline"
-              >
-                /{registeredSlug}
-              </Link>
-            </>
-          ) : (
-            "."
-          )}
+      <SpotlightCard className="p-6 sm:p-8" interactive={false}>
+        <div className="text-center">
+          <BrandMark href="/" size="lg" />
+          <h1 className="mt-5 font-heading text-2xl font-semibold tracking-tight text-foreground">
+            Masuk
+          </h1>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+            {redirectTo
+              ? "Login diperlukan untuk melanjutkan booking."
+              : registeredBusiness
+                ? "Akun siap. Masuk untuk membuka dashboard."
+                : `Akses dashboard ${BRAND_NAME} dengan akun Anda.`}
+          </p>
         </div>
-      )}
 
-      <SpotlightCard className="mt-6 p-6 sm:p-8" interactive={false}>
-        <form onSubmit={handleLogin} className="space-y-5">
+        {registeredBusiness && (
+          <div className="mt-5 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-foreground">
+            Akun owner berhasil dibuat
+            {registeredSlug ? (
+              <>
+                . Halaman publik:{" "}
+                <Link
+                  href={`/${registeredSlug}`}
+                  className="font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  /{registeredSlug}
+                </Link>
+              </>
+            ) : (
+              "."
+            )}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="mt-6 space-y-4">
           <FormError message={error} />
 
           <div className="space-y-2">
@@ -183,6 +183,7 @@ function LoginForm() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
                 required
                 className="h-11 pr-11"
               />
@@ -201,25 +202,13 @@ function LoginForm() {
             </div>
           </div>
 
-          <Button type="submit" disabled={loading} className="h-11 w-full text-base">
+          <Button type="submit" disabled={loading} className="mt-1 h-11 w-full">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
             Masuk
           </Button>
         </form>
-      </SpotlightCard>
 
-      {isDemoUiEnabled() ? (
-        <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-border bg-card/80 px-3.5 py-3 text-left">
-          <ShieldUser className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Butuh akun demo? Buka ikon shield di kiri bawah — berisi role, email, dan
-            password (termasuk semua capster).
-          </p>
-        </div>
-      ) : null}
-
-      <div className="mt-6 space-y-3 text-center text-sm text-muted-foreground">
-        <p>
+        <p className="mt-5 text-center text-sm text-muted-foreground">
           Belum punya akun member?{" "}
           <Link
             href="/register"
@@ -228,13 +217,17 @@ function LoginForm() {
             Daftar
           </Link>
         </p>
-        <Button asChild variant="outline" className="h-10 w-full sm:w-auto">
-          <Link href="/">
-            <ArrowLeft className="mr-1.5 h-4 w-4" aria-hidden />
-            Kembali ke beranda
-          </Link>
-        </Button>
-      </div>
+      </SpotlightCard>
+
+      {isDemoUiEnabled() ? (
+        <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-border/80 bg-card/70 px-3.5 py-3 text-left">
+          <ShieldUser className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Butuh akun demo? Buka ikon shield di kiri bawah — berisi role, email, dan
+            password (termasuk semua capster).
+          </p>
+        </div>
+      ) : null}
     </Reveal>
   );
 }
@@ -244,11 +237,11 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10 sm:py-14">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-grid-soft opacity-70"
+        className="pointer-events-none absolute inset-0 bg-grid-soft opacity-60"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-primary/8 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-primary/[0.09] via-primary/[0.03] to-transparent"
       />
       <div className="relative z-10 w-full max-w-[26rem]">
         <Suspense
