@@ -2,12 +2,12 @@
  * Feature flags keamanan — baca env sekali di server.
  */
 
-/** Demo UI & password lemah boleh di non-prod, atau flag eksplisit. */
+/**
+ * Shield akun demo di UI.
+ * Default ON (produk demo Cukuraja). Matikan dengan NEXT_PUBLIC_ENABLE_DEMO=false.
+ */
 export function isDemoUiEnabled() {
-  return (
-    process.env.NEXT_PUBLIC_ENABLE_DEMO === 'true' ||
-    process.env.NODE_ENV !== 'production'
-  )
+  return process.env.NEXT_PUBLIC_ENABLE_DEMO !== 'false'
 }
 
 /**

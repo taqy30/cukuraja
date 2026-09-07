@@ -14,6 +14,7 @@ import {
 import { BrandMark } from "@/components/BrandMark";
 import { askAlert } from "@/components/feedback/ConfirmHost";
 import { ROLE_LABEL, type AppRole } from "@/lib/auth/roles";
+import { isDemoUiEnabled } from "@/lib/security/flags";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -199,8 +200,7 @@ function LoginForm() {
         </form>
       </SpotlightCard>
 
-      {process.env.NEXT_PUBLIC_ENABLE_DEMO === "true" ||
-      process.env.NODE_ENV !== "production" ? (
+      {isDemoUiEnabled() ? (
         <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-border bg-card/80 px-3.5 py-3 text-left">
           <ShieldUser className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
           <p className="text-xs leading-relaxed text-muted-foreground">
