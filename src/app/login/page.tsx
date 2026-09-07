@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, Loader2, ShieldUser } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2, ShieldUser } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { getSafeRedirectPath } from "@/lib/auth/safe-redirect";
 import {
@@ -115,17 +115,25 @@ function LoginForm() {
 
   return (
     <Reveal className="w-full max-w-[26rem]">
+      <Link
+        href="/"
+        className="mb-8 inline-flex items-center gap-2 rounded-xl border border-border bg-card/90 px-3.5 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-soft-sm)] transition hover:bg-muted"
+      >
+        <ArrowLeft className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+        Kembali ke beranda
+      </Link>
+
       <div className="text-center">
         <BrandMark href="/" size="lg" />
-        <h1 className="mt-6 font-heading text-2xl font-semibold tracking-tight text-foreground">
-          Masuk
+        <h1 className="mt-6 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-[1.65rem]">
+          Masuk ke {BRAND_NAME}
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
           {redirectTo
             ? "Login diperlukan untuk melanjutkan booking."
             : registeredBusiness
               ? "Akun siap. Masuk untuk membuka dashboard."
-              : `Masuk ke dashboard ${BRAND_NAME}.`}
+              : "Gunakan email dan password akun Anda untuk membuka dashboard."}
         </p>
       </div>
 
@@ -148,8 +156,8 @@ function LoginForm() {
         </div>
       )}
 
-      <SpotlightCard className="mt-6 p-6 sm:p-7" interactive={false}>
-        <form onSubmit={handleLogin} className="space-y-4">
+      <SpotlightCard className="mt-6 p-6 sm:p-8" interactive={false}>
+        <form onSubmit={handleLogin} className="space-y-5">
           <FormError message={error} />
 
           <div className="space-y-2">
@@ -193,7 +201,7 @@ function LoginForm() {
             </div>
           </div>
 
-          <Button type="submit" disabled={loading} className="h-11 w-full">
+          <Button type="submit" disabled={loading} className="h-11 w-full text-base">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
             Masuk
           </Button>
@@ -210,23 +218,43 @@ function LoginForm() {
         </div>
       ) : null}
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        Belum punya akun member?{" "}
-        <Link href="/register" className="font-medium text-primary underline-offset-4 hover:underline">
-          Daftar
-        </Link>
-      </p>
+      <div className="mt-6 space-y-3 text-center text-sm text-muted-foreground">
+        <p>
+          Belum punya akun member?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Daftar
+          </Link>
+        </p>
+        <Button asChild variant="outline" className="h-10 w-full sm:w-auto">
+          <Link href="/">
+            <ArrowLeft className="mr-1.5 h-4 w-4" aria-hidden />
+            Kembali ke beranda
+          </Link>
+        </Button>
+      </div>
     </Reveal>
   );
 }
 
 export default function LoginPage() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid-soft opacity-70" />
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10 sm:py-14">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid-soft opacity-70"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-primary/8 to-transparent"
+      />
       <div className="relative z-10 w-full max-w-[26rem]">
         <Suspense
-          fallback={<Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" aria-hidden />}
+          fallback={
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" aria-hidden />
+          }
         >
           <LoginForm />
         </Suspense>
