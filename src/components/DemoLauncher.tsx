@@ -63,15 +63,8 @@ export default function DemoLauncher() {
               </button>
             </div>
 
-            <div className="max-h-[min(62vh,34rem)] space-y-3 overflow-y-auto p-3">
+            <div className="max-h-[min(62vh,34rem)] overflow-y-auto p-3">
               <DemoAccountButtons onUsed={() => setOpen(false)} />
-              <p className="rounded-lg bg-muted/70 px-3 py-2 text-[11px] leading-relaxed text-muted-foreground">
-                <span className="font-semibold text-foreground">Owner</span> tidak
-                muncul di tabel <span className="font-mono">staff</span> Supabase.
-                Cek Auth users + kolom{" "}
-                <span className="font-mono">businesses.owner_id</span>. Role staff
-                hanya: admin, kasir, capster.
-              </p>
             </div>
           </motion.div>
         )}
@@ -102,4 +95,4 @@ export {
   DEMO_CREDENTIALS_KEY,
   DEMO_FILL_EVENT,
   type DemoCredentials,
-} from "@/components/DemoAccountButtons";
+} from "@/lib/demo-credentials-events";

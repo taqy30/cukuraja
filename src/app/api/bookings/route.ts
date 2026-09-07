@@ -5,7 +5,7 @@ import { authErrorResponse, AuthError, requireAuth } from '@/lib/auth/guards'
 import { can, permissionsFor } from '@/lib/auth/roles'
 import { BOOKING_SELECT } from '@/lib/auth/redirect'
 import { dateInJakarta } from '@/lib/datetime'
-import { isDateISO } from '@/lib/validation/input'
+import { isDateISO, maskPhone } from '@/lib/validation/input'
 import { guardApiRequest } from '@/lib/security/http'
 
 /**
@@ -15,7 +15,7 @@ import { guardApiRequest } from '@/lib/security/http'
  */
 export async function GET(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'bookings-list',
       limit: 90,
       requireSameOrigin: false,
@@ -58,6 +58,14 @@ export async function GET(request: NextRequest) {
     const { data: bookings, error } = await query
     if (error) throw error
 
+    const safeBookings = (bookings ?? []).map((b) => {
+      if (ctx.role !== 'capster') return b
+      return {
+        ...b,
+        customer_phone: maskPhone(String((b as { customer_phone?: string }).customer_phone ?? '')),
+      }
+    })
+
     const [{ data: services }, { data: capsters }] = await Promise.all([
       admin
         .from('services')
@@ -80,7 +88,7 @@ export async function GET(request: NextRequest) {
       businessId: ctx.businessId,
       staffId: ctx.staffId,
       permissions: permissionsFor(ctx.role),
-      bookings: bookings ?? [],
+      bookings: safeBookings,
       services: services ?? [],
       capsters: capsters ?? [],
     })

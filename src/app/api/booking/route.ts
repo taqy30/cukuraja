@@ -31,7 +31,7 @@ import {
  */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'booking-create',
       limit: 20,
     })

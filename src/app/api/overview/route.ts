@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { authErrorResponse, requireBusinessPermission } from '@/lib/auth/guards'
 import { can } from '@/lib/auth/roles'
 import { dateInJakarta } from '@/lib/datetime'
+import { guardApiRequest } from '@/lib/security/http'
 
 interface BookingRow {
   status: string
@@ -31,6 +32,13 @@ function customerKey(row: BookingRow) {
  */
 export async function GET(request: NextRequest) {
   try {
+    const blocked = await guardApiRequest(request, {
+      key: 'overview',
+      limit: 60,
+      requireSameOrigin: false,
+    })
+    if (blocked) return blocked
+
     const supabase = await createClient()
     const ctx = await requireBusinessPermission(supabase, 'overview.view')
 

@@ -12,6 +12,7 @@ import {
   sanitizeText,
 } from '@/lib/validation/input'
 import { guardApiRequest } from '@/lib/security/http'
+import { allowUnverifiedSignup } from '@/lib/security/flags'
 
 export interface CustomerRow {
   id: string
@@ -61,8 +62,15 @@ function aggregate(bookings: RawBooking[]): Map<string, CustomerRow> {
   return map
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const blocked = await guardApiRequest(request, {
+      key: 'customers-list',
+      limit: 60,
+      requireSameOrigin: false,
+    })
+    if (blocked) return blocked
+
     const supabase = await createClient()
     const ctx = await requireBusinessPermission(supabase, 'customer.read')
 
@@ -123,7 +131,7 @@ export async function GET() {
 /** Buat akun pelanggan. Hanya owner (`customer.manage`). */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'customers-create', limit: 10 })
+    const blocked = await guardApiRequest(request, { key: 'customers-create', limit: 10 })
     if (blocked) return blocked
 
     const supabase = await createClient()
@@ -151,7 +159,7 @@ export async function POST(request: NextRequest) {
     const { data: authData, error: authError } = await admin.auth.admin.createUser({
       email,
       password,
-      email_confirm: true,
+      email_confirm: allowUnverifiedSignup(),
       user_metadata: {
         full_name: name,
         role: 'customer',
@@ -162,7 +170,7 @@ export async function POST(request: NextRequest) {
 
     if (authError) {
       return NextResponse.json(
-        { error: 'Gagal membuat akun. Pastikan email belum terdaftar.' },
+        { error: 'Gagal membuat akun. Periksa data atau coba email lain.' },
         { status: 400 }
       )
     }

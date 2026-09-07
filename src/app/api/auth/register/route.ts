@@ -12,7 +12,7 @@ import {
 /** Registrasi pelanggan dengan rate limit + sanitasi metadata. */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'auth-register',
       limit: 5,
       windowMs: 60_000,
@@ -58,21 +58,19 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
-      const msg = error.message.toLowerCase()
+      // Pesan generik — hindari enumerasi email.
       return NextResponse.json(
-        {
-          error:
-            msg.includes('already') || msg.includes('registered')
-              ? 'Email sudah terdaftar. Silakan masuk.'
-              : 'Gagal mendaftar. Periksa data Anda.',
-        },
+        { error: 'Gagal mendaftar. Periksa data Anda atau coba masuk.' },
         { status: 400 }
       )
     }
 
+    const needsEmailConfirmation = !data.session
+
     return NextResponse.json(
       {
         ok: true,
+        needsEmailConfirmation,
         user: data.user
           ? { id: data.user.id, email: data.user.email, name }
           : null,

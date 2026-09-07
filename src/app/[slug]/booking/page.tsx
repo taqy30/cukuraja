@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useCallback, useEffect, useState } from "react";
+import { Suspense, use, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -89,7 +89,7 @@ const pickClass = (active: boolean, disabled = false) =>
         : "border-border hover:border-primary/40 hover:bg-muted/30",
   ].join(" ");
 
-export default function BookingPage({
+function BookingPageContent({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -662,5 +662,23 @@ export default function BookingPage({
         </AnimatePresence>
       </form>
     </div>
+  );
+}
+
+export default function BookingPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[40vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden />
+        </div>
+      }
+    >
+      <BookingPageContent params={params} />
+    </Suspense>
   );
 }

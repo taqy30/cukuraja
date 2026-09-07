@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import DemoLauncher from "@/components/DemoLauncher";
+import DemoLauncherHost from "@/components/DemoLauncherHost";
 import AppToaster from "@/components/feedback/AppToaster";
 import ConfirmHost from "@/components/feedback/ConfirmHost";
 import { BRAND_DESCRIPTION, BRAND_NAME } from "@/lib/brand";
+import { isDemoUiEnabled } from "@/lib/security/flags";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -29,13 +30,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const enableDemo = isDemoUiEnabled();
+
   return (
     <html lang="id" className={`${poppins.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         {children}
         <AppToaster />
         <ConfirmHost />
-        <DemoLauncher />
+        <DemoLauncherHost enabled={enableDemo} />
       </body>
     </html>
   );

@@ -1,14 +1,22 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { authErrorResponse, requirePermission } from '@/lib/auth/guards'
+import { guardApiRequest } from '@/lib/security/http'
 
 /**
  * Riwayat booking milik pelanggan yang login.
  * Pakai admin client setelah auth agar tidak gagal karena RLS join ke staff/services.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const blocked = await guardApiRequest(request, {
+      key: 'my-bookings',
+      limit: 60,
+      requireSameOrigin: false,
+    })
+    if (blocked) return blocked
+
     const supabase = await createClient()
     const ctx = await requirePermission(supabase, 'booking.read.own')
 

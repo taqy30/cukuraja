@@ -20,7 +20,7 @@ import { guardApiRequest } from '@/lib/security/http'
  */
 export async function GET(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'slots',
       limit: 60,
       requireSameOrigin: false,

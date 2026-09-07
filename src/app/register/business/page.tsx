@@ -12,7 +12,7 @@ import { FormError } from "@/components/ui/modal";
 import { Reveal } from "@/components/motion";
 import { BrandMark } from "@/components/BrandMark";
 import { slugify } from "@/lib/validation/input";
-import { BRAND_NAME } from "@/lib/brand";
+import { BRAND_NAME, SHOP_SLUG } from "@/lib/brand";
 
 export default function RegisterBusinessPage() {
   const router = useRouter();
@@ -177,7 +177,7 @@ export default function RegisterBusinessPage() {
             <div className="space-y-2">
               <Label htmlFor="biz-slug">Alamat booking (slug)</Label>
               <div className="flex items-center gap-2">
-                <span className="shrink-0 text-sm text-muted-foreground">antriku.app/</span>
+                <span className="shrink-0 text-sm text-muted-foreground">/</span>
                 <Input
                   id="biz-slug"
                   value={computedSlug}
@@ -185,12 +185,13 @@ export default function RegisterBusinessPage() {
                     setSlugManual(true);
                     setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""));
                   }}
-                  placeholder="barbershop-taqy"
+                  placeholder={SHOP_SLUG}
                   required
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Pelanggan member booking online di URL ini. Walk-in non-member tetap bisa dilayani kasir tanpa akun.
+                Path publik toko, contoh: /{SHOP_SLUG}. Pelanggan booking di yoursite.com/
+                {SHOP_SLUG}. Walk-in non-member tetap bisa dilayani kasir tanpa akun.
               </p>
             </div>
 

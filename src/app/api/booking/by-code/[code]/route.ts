@@ -17,9 +17,10 @@ export async function GET(
   { params }: { params: Promise<{ code: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'by-code',
-      limit: 30,
+      limit: 20,
+      windowMs: 60_000,
       requireSameOrigin: false,
     })
     if (blocked) return blocked
@@ -55,8 +56,9 @@ export async function GET(
     const isBusinessStaff =
       ctx.role !== 'customer' && canTouchBooking(ctx, booking)
 
+    // Samakan 404 untuk mencegah enumerasi kode (oracle 403 vs 404).
     if (!isOwnerCustomer && !isBusinessStaff) {
-      return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 })
+      return NextResponse.json({ error: 'Booking tidak ditemukan' }, { status: 404 })
     }
 
     const { count } = await admin

@@ -11,6 +11,10 @@ import {
   slugify,
 } from '@/lib/validation/input'
 import { guardApiRequest } from '@/lib/security/http'
+import {
+  allowUnverifiedSignup,
+  isBusinessRegisterEnabled,
+} from '@/lib/security/flags'
 
 const DEFAULT_SERVICES = [
   {
@@ -39,7 +43,14 @@ const DEFAULT_SERVICES = [
  */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    if (!isBusinessRegisterEnabled()) {
+      return NextResponse.json(
+        { error: 'Pendaftaran bisnis tidak tersedia' },
+        { status: 403 }
+      )
+    }
+
+    const blocked = await guardApiRequest(request, {
       key: 'register-business',
       limit: 3,
       windowMs: 60_000,
@@ -124,7 +135,7 @@ export async function POST(request: NextRequest) {
     const { data: authData, error: authError } = await admin.auth.admin.createUser({
       email,
       password,
-      email_confirm: true,
+      email_confirm: allowUnverifiedSignup(),
       user_metadata: {
         full_name: ownerName,
         phone: ownerPhone || null,
@@ -133,13 +144,11 @@ export async function POST(request: NextRequest) {
     })
 
     if (authError || !authData.user) {
-      const msg = authError?.message?.toLowerCase() ?? ''
+      // Pesan generik — hindari enumerasi email.
       return NextResponse.json(
         {
           error:
-            msg.includes('already') || msg.includes('registered') || msg.includes('exists')
-              ? 'Email sudah terdaftar. Silakan masuk, atau pakai email lain.'
-              : 'Gagal membuat akun owner',
+            'Tidak dapat mendaftarkan bisnis dengan data ini. Coba email lain atau masuk jika sudah punya akun.',
         },
         { status: 400 }
       )

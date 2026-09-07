@@ -12,8 +12,15 @@ import { isValidSlug, sanitizeText } from '@/lib/validation/input'
 import { guardApiRequest, secureCookieOptions } from '@/lib/security/http'
 
 /** Daftar barbershop membership + bisnis aktif pelanggan. */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const blocked = await guardApiRequest(request, {
+      key: 'my-businesses',
+      limit: 60,
+      requireSameOrigin: false,
+    })
+    if (blocked) return blocked
+
     const supabase = await createClient()
     const ctx = await requireAuth(supabase)
 
@@ -50,7 +57,7 @@ export async function GET() {
 /** Set barbershop aktif (cookie) untuk dashboard pelanggan. */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'my-businesses-set', limit: 30 })
+    const blocked = await guardApiRequest(request, { key: 'my-businesses-set', limit: 30 })
     if (blocked) return blocked
 
     const supabase = await createClient()

@@ -50,7 +50,7 @@ export default function DashboardShell({
     const ok = await askConfirm({
       title: "Yakin ingin logout?",
       description: "Anda akan keluar dari dashboard dan perlu login lagi untuk kembali.",
-      confirmLabel: "Logout",
+      confirmLabel: "Ya, keluar",
       cancelLabel: "Batal",
       danger: true,
     });

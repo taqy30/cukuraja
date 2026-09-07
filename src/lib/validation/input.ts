@@ -14,7 +14,12 @@ const COMMON_PASSWORDS = new Set([
   'letmein1',
   'owner123',
   'staff123',
+  'user123',
   'user1234',
+  'capster123',
+  'customer123',
+  'cukuraja',
+  'cukuraja1',
 ])
 
 export function sanitizeText(input: unknown, maxLength = 200): string {
@@ -73,6 +78,17 @@ export function maskPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '')
   if (digits.length < 8) return '****'
   return `${digits.slice(0, 3)}****${digits.slice(-3)}`
+}
+
+/** Mask email untuk response non-owner (hindari bocor PII tim). */
+export function maskEmail(email: string): string {
+  const trimmed = email.trim().toLowerCase()
+  const at = trimmed.indexOf('@')
+  if (at < 1) return '***'
+  const local = trimmed.slice(0, at)
+  const domain = trimmed.slice(at + 1)
+  const visible = local.slice(0, Math.min(2, local.length))
+  return `${visible}***@${domain}`
 }
 
 /**

@@ -50,7 +50,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, { key: 'booking-status', limit: 60 })
+    const blocked = await guardApiRequest(request, { key: 'booking-status', limit: 60 })
     if (blocked) return blocked
 
     const { id } = await params

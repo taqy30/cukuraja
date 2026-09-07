@@ -28,7 +28,7 @@ import { guardApiRequest } from '@/lib/security/http'
  */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'walk-in', limit: 30 })
+    const blocked = await guardApiRequest(request, { key: 'walk-in', limit: 30 })
     if (blocked) return blocked
 
     const supabase = await createClient()

@@ -12,7 +12,7 @@ import {
 
 export async function GET(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'settings-get',
       limit: 60,
       requireSameOrigin: false,
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'settings-patch', limit: 20 })
+    const blocked = await guardApiRequest(request, { key: 'settings-patch', limit: 20 })
     if (blocked) return blocked
 
     const supabase = await createClient()

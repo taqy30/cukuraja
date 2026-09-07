@@ -57,6 +57,22 @@ function RegisterForm() {
     }
 
     setLoading(false);
+
+    if (data.needsEmailConfirmation) {
+      await askAlert({
+        title: "Cek email Anda",
+        description:
+          "Akun sudah dibuat. Buka tautan konfirmasi di email, lalu masuk untuk mulai booking.",
+        confirmLabel: "Ke halaman masuk",
+        autoCloseMs: 4500,
+      });
+      router.push(
+        redirectTo ? loginUrlWithRedirect(redirectTo) : "/login"
+      );
+      router.refresh();
+      return;
+    }
+
     const destination = redirectTo ?? "/dashboard/customer";
 
     await askAlert({
@@ -139,7 +155,7 @@ function RegisterForm() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min. 8 karakter"
+                placeholder="Min. 8 karakter, huruf + angka"
                 minLength={8}
                 required
                 className="h-11 pr-11"

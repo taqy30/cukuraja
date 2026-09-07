@@ -4,14 +4,20 @@ import { useCallback, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { DEMO_ACCOUNTS, demoRoleTitle } from "@/lib/demo-accounts";
+import {
+  DEMO_CREDENTIALS_KEY,
+  DEMO_FILL_EVENT,
+  type DemoCredentials,
+} from "@/lib/demo-credentials-events";
 import { ROLE_LABEL } from "@/lib/auth/roles";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export const DEMO_FILL_EVENT = "cukuraja:fill-demo";
-export const DEMO_CREDENTIALS_KEY = "cukuraja:demo-credentials";
-
-export type DemoCredentials = { email: string; password: string };
+export {
+  DEMO_CREDENTIALS_KEY,
+  DEMO_FILL_EVENT,
+  type DemoCredentials,
+} from "@/lib/demo-credentials-events";
 
 type Props = {
   className?: string;

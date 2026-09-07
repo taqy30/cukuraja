@@ -51,7 +51,7 @@ export async function PATCH(
   { params }: { params: Promise<{ key: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, { key: 'customer-patch', limit: 20 })
+    const blocked = await guardApiRequest(request, { key: 'customer-patch', limit: 20 })
     if (blocked) return blocked
 
     const { key: rawKey } = await params
@@ -127,7 +127,7 @@ export async function DELETE(
   { params }: { params: Promise<{ key: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, { key: 'customer-delete', limit: 15 })
+    const blocked = await guardApiRequest(request, { key: 'customer-delete', limit: 15 })
     if (blocked) return blocked
 
     const { key: rawKey } = await params

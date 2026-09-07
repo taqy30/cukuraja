@@ -56,7 +56,7 @@ export default function CustomerDashboardShell({
     const ok = await askConfirm({
       title: "Yakin ingin logout?",
       description: "Anda akan keluar dari akun pelanggan dan perlu login lagi untuk kembali.",
-      confirmLabel: "Logout",
+      confirmLabel: "Ya, keluar",
       cancelLabel: "Batal",
       danger: true,
     });

@@ -31,8 +31,8 @@ function contentSecurityPolicy() {
     "media-src 'self' blob:",
     "font-src 'self' data: https://fonts.gstatic.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    // Next.js / Framer Motion sering butuh inline/eval di dev; production tetap 'unsafe-inline' untuk Next runtime.
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    // Next.js butuh unsafe-inline; unsafe-eval hanya di development.
+    `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
     `connect-src ${connectSrc}`,
     ...(isProd ? ["upgrade-insecure-requests"] : []),
   ].join("; ");

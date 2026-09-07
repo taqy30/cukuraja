@@ -9,7 +9,7 @@ import { isEmail, sanitizeText } from '@/lib/validation/input'
  */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'auth-login',
       limit: 10,
       windowMs: 60_000,

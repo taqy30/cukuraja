@@ -16,8 +16,8 @@ export type ConfirmOptions = {
   /** Hanya satu tombol (info/sukses), tanpa Batal. */
   alert?: boolean;
   /**
-   * Auto-tutup & resolve `true` setelah N ms (countdown di tombol).
-   * Berguna untuk sukses login → redirect otomatis.
+   * Auto-tutup & resolve `true` setelah N ms.
+   * Menampilkan garis progress yang mengecil (bukan countdown angka).
    */
   autoCloseMs?: number;
 };
@@ -55,7 +55,6 @@ export function askAlert(
 export default function ConfirmHost() {
   const reduced = useReducedMotion();
   const [pending, setPending] = useState<Pending | null>(null);
-  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
 
   useEffect(() => {
     askConfirmImpl = (options) =>
@@ -71,7 +70,6 @@ export default function ConfirmHost() {
   const close = (value: boolean) => {
     pending?.resolve(value);
     setPending(null);
-    setSecondsLeft(null);
   };
 
   useEffect(() => {
@@ -90,36 +88,18 @@ export default function ConfirmHost() {
   }, [pending]);
 
   useEffect(() => {
-    if (!pending?.autoCloseMs || pending.autoCloseMs <= 0) {
-      setSecondsLeft(null);
-      return;
-    }
+    if (!pending?.autoCloseMs || pending.autoCloseMs <= 0) return;
 
-    const totalSec = Math.max(1, Math.ceil(pending.autoCloseMs / 1000));
-    setSecondsLeft(totalSec);
+    const timer = window.setTimeout(() => {
+      close(true);
+    }, pending.autoCloseMs);
 
-    const started = Date.now();
-    const tick = window.setInterval(() => {
-      const elapsed = Date.now() - started;
-      const left = Math.max(0, Math.ceil((pending.autoCloseMs! - elapsed) / 1000));
-      setSecondsLeft(left);
-      if (elapsed >= pending.autoCloseMs!) {
-        window.clearInterval(tick);
-        close(true);
-      }
-    }, 200);
-
-    return () => window.clearInterval(tick);
+    return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pending]);
 
-  const confirmText = (() => {
-    const base = pending?.confirmLabel ?? (pending?.alert ? "OK" : "Lanjutkan");
-    if (secondsLeft != null && pending?.autoCloseMs) {
-      return `${base} (${secondsLeft})`;
-    }
-    return base;
-  })();
+  const showProgress = Boolean(pending?.autoCloseMs && pending.autoCloseMs > 0);
+  const progressMs = pending?.autoCloseMs ?? 0;
 
   return (
     <AnimatePresence>
@@ -145,66 +125,89 @@ export default function ConfirmHost() {
             animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
             transition={transitionSoft}
-            className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft-xl)]"
+            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft-xl)]"
           >
-            <div className="flex gap-3">
-              <span
-                className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                  pending.alert
-                    ? "bg-accent/10 text-accent"
-                    : pending.danger
-                      ? "bg-destructive/10 text-destructive"
-                      : "bg-primary/10 text-primary"
-                }`}
-              >
-                {pending.alert ? (
-                  <CheckCircle2 className="h-5 w-5" aria-hidden />
-                ) : (
-                  <AlertTriangle className="h-5 w-5" aria-hidden />
-                )}
-              </span>
-              <div className="min-w-0">
-                <h2
-                  id="confirm-title"
-                  className="font-heading text-base font-semibold text-foreground"
+            <div className="p-6">
+              <div className="flex gap-3">
+                <span
+                  className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                    pending.alert
+                      ? "bg-accent/10 text-accent"
+                      : pending.danger
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-primary/10 text-primary"
+                  }`}
                 >
-                  {pending.title}
-                </h2>
-                {pending.description && (
-                  <p
-                    id="confirm-desc"
-                    className="mt-1.5 text-sm leading-relaxed text-muted-foreground"
+                  {pending.alert ? (
+                    <CheckCircle2 className="h-5 w-5" aria-hidden />
+                  ) : (
+                    <AlertTriangle className="h-5 w-5" aria-hidden />
+                  )}
+                </span>
+                <div className="min-w-0">
+                  <h2
+                    id="confirm-title"
+                    className="font-heading text-base font-semibold text-foreground"
                   >
-                    {pending.description}
-                  </p>
+                    {pending.title}
+                  </h2>
+                  {pending.description && (
+                    <p
+                      id="confirm-desc"
+                      className="mt-1.5 text-sm leading-relaxed text-muted-foreground"
+                    >
+                      {pending.description}
+                    </p>
+                  )}
+                  {showProgress && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Mengalihkan otomatis…
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                {!pending.alert && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => close(false)}
+                  >
+                    {pending.cancelLabel ?? "Batal"}
+                  </Button>
                 )}
-                {pending.autoCloseMs && secondsLeft != null && (
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Mengalihkan otomatis dalam {secondsLeft} detik…
-                  </p>
-                )}
+                <Button
+                  type="button"
+                  variant={pending.danger ? "destructive" : "default"}
+                  onClick={() => close(true)}
+                  className={pending.alert ? "w-full sm:w-auto" : undefined}
+                >
+                  {pending.confirmLabel ?? (pending.alert ? "OK" : "Lanjutkan")}
+                </Button>
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              {!pending.alert && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => close(false)}
-                >
-                  {pending.cancelLabel ?? "Batal"}
-                </Button>
-              )}
-              <Button
-                type="button"
-                variant={pending.danger ? "destructive" : "default"}
-                onClick={() => close(true)}
-                className={pending.alert ? "w-full sm:w-auto" : undefined}
+            {showProgress && (
+              <div
+                className="h-1 w-full bg-muted"
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Mengalihkan otomatis"
               >
-                {confirmText}
-              </Button>
-            </div>
+                <motion.div
+                  className="h-full origin-left bg-primary"
+                  initial={{ scaleX: 1 }}
+                  animate={{ scaleX: 0 }}
+                  transition={
+                    reduced
+                      ? { duration: 0 }
+                      : { duration: progressMs / 1000, ease: "linear" }
+                  }
+                />
+              </div>
+            )}
           </motion.div>
         </div>
       )}

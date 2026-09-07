@@ -30,7 +30,7 @@ interface CapsterBookingRow {
  */
 export async function GET(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'capsters',
       limit: 60,
       requireSameOrigin: false,

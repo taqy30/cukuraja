@@ -10,7 +10,7 @@ import {
   DEMO_CREDENTIALS_KEY,
   DEMO_FILL_EVENT,
   type DemoCredentials,
-} from "@/components/DemoLauncher";
+} from "@/lib/demo-credentials-events";
 import { BrandMark } from "@/components/BrandMark";
 import { askAlert } from "@/components/feedback/ConfirmHost";
 import { ROLE_LABEL, type AppRole } from "@/lib/auth/roles";
@@ -105,7 +105,7 @@ function LoginForm() {
       title: "Login berhasil",
       description: `Selamat datang, ${me.name || roleLabel}. Anda masuk sebagai ${roleLabel}.`,
       confirmLabel: "Ke dashboard",
-      autoCloseMs: 2800,
+      autoCloseMs: 2400,
     });
 
     router.push(destination);
@@ -199,13 +199,16 @@ function LoginForm() {
         </form>
       </SpotlightCard>
 
-      <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-border bg-card/80 px-3.5 py-3 text-left">
-        <ShieldUser className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Butuh akun demo? Buka ikon shield di kiri bawah — berisi role, email, dan
-          password (termasuk semua capster).
-        </p>
-      </div>
+      {process.env.NEXT_PUBLIC_ENABLE_DEMO === "true" ||
+      process.env.NODE_ENV !== "production" ? (
+        <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-border bg-card/80 px-3.5 py-3 text-left">
+          <ShieldUser className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Butuh akun demo? Buka ikon shield di kiri bawah — berisi role, email, dan
+            password (termasuk semua capster).
+          </p>
+        </div>
+      ) : null}
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Belum punya akun member?{" "}

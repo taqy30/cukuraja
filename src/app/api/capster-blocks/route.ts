@@ -23,6 +23,13 @@ import { guardApiRequest } from '@/lib/security/http'
  */
 export async function GET(request: NextRequest) {
   try {
+    const blocked = await guardApiRequest(request, {
+      key: 'capster-blocks-list',
+      limit: 60,
+      requireSameOrigin: false,
+    })
+    if (blocked) return blocked
+
     const supabase = await createClient()
     const ctx = await requirePermission(supabase, 'schedule.block')
     if (!ctx.businessId) {
@@ -78,7 +85,7 @@ export async function GET(request: NextRequest) {
 /** Tutup slot (berhalangan). */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'capster-block-create', limit: 40 })
+    const blocked = await guardApiRequest(request, { key: 'capster-block-create', limit: 40 })
     if (blocked) return blocked
 
     const supabase = await createClient()
@@ -159,7 +166,7 @@ export async function POST(request: NextRequest) {
 /** Buka kembali slot yang ditutup. */
 export async function DELETE(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'capster-block-delete', limit: 40 })
+    const blocked = await guardApiRequest(request, { key: 'capster-block-delete', limit: 40 })
     if (blocked) return blocked
 
     const supabase = await createClient()

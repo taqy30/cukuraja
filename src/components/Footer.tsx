@@ -61,7 +61,7 @@ export default function Footer() {
 
       <div className="border-t border-border px-4 py-4 sm:px-6 lg:px-8">
         <p className="mx-auto max-w-7xl text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {BRAND_NAME}. Barbershop demo.
+          © {new Date().getFullYear()} {BRAND_NAME}. Barbershop booking online.
         </p>
       </div>
     </footer>

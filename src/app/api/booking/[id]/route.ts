@@ -25,7 +25,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, { key: 'booking-patch', limit: 40 })
+    const blocked = await guardApiRequest(request, { key: 'booking-patch', limit: 40 })
     if (blocked) return blocked
 
     const { id } = await params
@@ -165,7 +165,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const blocked = guardApiRequest(request, { key: 'booking-delete', limit: 20 })
+    const blocked = await guardApiRequest(request, { key: 'booking-delete', limit: 20 })
     if (blocked) return blocked
 
     const { id } = await params

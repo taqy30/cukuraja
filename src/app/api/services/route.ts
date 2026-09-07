@@ -9,7 +9,7 @@ import { guardApiRequest } from '@/lib/security/http'
 /** Daftar layanan. Semua role bisnis boleh membaca (`service.read`). */
 export async function GET(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, {
+    const blocked = await guardApiRequest(request, {
       key: 'services-list',
       limit: 60,
       requireSameOrigin: false,
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 /** Tambah layanan. Owner & admin (`service.manage`). */
 export async function POST(request: NextRequest) {
   try {
-    const blocked = guardApiRequest(request, { key: 'services-create', limit: 20 })
+    const blocked = await guardApiRequest(request, { key: 'services-create', limit: 20 })
     if (blocked) return blocked
 
     const supabase = await createClient()

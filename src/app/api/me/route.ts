@@ -1,11 +1,19 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getAuthContext } from '@/lib/auth/guards'
 import { permissionsFor } from '@/lib/auth/roles'
 import { getDefaultBusiness } from '@/lib/data/business'
+import { guardApiRequest } from '@/lib/security/http'
 
 /** Identitas + daftar izin milik user yang sedang login. */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const blocked = await guardApiRequest(request, {
+    key: 'me',
+    limit: 90,
+    requireSameOrigin: false,
+  })
+  if (blocked) return blocked
+
   const supabase = await createClient()
   const ctx = await getAuthContext(supabase)
 
