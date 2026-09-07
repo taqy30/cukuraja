@@ -4,7 +4,8 @@
 
 /**
  * Shield akun demo di UI.
- * Default ON (produk demo Cukuraja). Matikan dengan NEXT_PUBLIC_ENABLE_DEMO=false.
+ * Default ON — sengaja untuk porto/demo Cukuraja (ikon shield + akun uji).
+ * Matikan hanya jika perlu: NEXT_PUBLIC_ENABLE_DEMO=false.
  */
 export function isDemoUiEnabled() {
   return process.env.NEXT_PUBLIC_ENABLE_DEMO !== 'false'

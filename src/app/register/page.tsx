@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { getSafeRedirectPath, loginUrlWithRedirect } from "@/lib/auth/safe-redirect";
 import { BrandMark } from "@/components/BrandMark";
 import { askAlert } from "@/components/feedback/ConfirmHost";
@@ -33,7 +33,7 @@ function RegisterForm() {
     setError(null);
 
     if (password.length < 8) {
-      setError("Password minimal 8 karakter");
+      setError("Password minimal 8 karakter, harus ada huruf dan angka");
       return;
     }
 
@@ -66,9 +66,7 @@ function RegisterForm() {
         confirmLabel: "Ke halaman masuk",
         autoCloseMs: 4500,
       });
-      router.push(
-        redirectTo ? loginUrlWithRedirect(redirectTo) : "/login"
-      );
+      router.push(redirectTo ? loginUrlWithRedirect(redirectTo) : "/login");
       router.refresh();
       return;
     }
@@ -88,20 +86,28 @@ function RegisterForm() {
 
   return (
     <Reveal className="w-full max-w-[26rem]">
-      <div className="text-center">
-        <BrandMark href="/" size="lg" />
-        <h1 className="mt-6 font-heading text-2xl font-semibold tracking-tight text-foreground">
-          Daftar member
-        </h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {redirectTo
-            ? "Setelah daftar, Anda langsung lanjut booking."
-            : `Buat akun untuk booking online di ${BRAND_NAME}.`}
-        </p>
-      </div>
+      <Link
+        href="/"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4 text-primary" aria-hidden />
+        Kembali ke beranda
+      </Link>
 
-      <SpotlightCard className="mt-6 p-6 sm:p-7" interactive={false}>
-        <form onSubmit={handleRegister} className="space-y-4">
+      <SpotlightCard className="p-6 sm:p-8" interactive={false}>
+        <div className="text-center">
+          <BrandMark href="/" size="lg" />
+          <h1 className="mt-5 font-heading text-2xl font-semibold tracking-tight text-foreground">
+            Daftar member
+          </h1>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+            {redirectTo
+              ? "Setelah daftar, Anda langsung lanjut booking."
+              : `Buat akun untuk booking online di ${BRAND_NAME}.`}
+          </p>
+        </div>
+
+        <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <FormError message={error} />
 
           <div className="space-y-2">
@@ -133,7 +139,8 @@ function RegisterForm() {
 
           <div className="space-y-2">
             <Label htmlFor="phone">
-              WhatsApp <span className="font-normal text-muted-foreground">(opsional)</span>
+              WhatsApp{" "}
+              <span className="font-normal text-muted-foreground">(opsional)</span>
             </Label>
             <Input
               id="phone"
@@ -155,7 +162,7 @@ function RegisterForm() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min. 8 karakter, huruf + angka"
+                placeholder="••••••••"
                 minLength={8}
                 required
                 className="h-11 pr-11"
@@ -173,42 +180,54 @@ function RegisterForm() {
                 )}
               </button>
             </div>
+            <p className="text-xs text-muted-foreground">
+              Minimal 8 karakter, mengandung huruf dan angka.
+            </p>
           </div>
 
-          <Button type="submit" disabled={loading} className="h-11 w-full">
+          <Button type="submit" disabled={loading} className="mt-1 h-11 w-full">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
             Daftar
           </Button>
         </form>
-      </SpotlightCard>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        Sudah punya akun?{" "}
-        <Link
-          href={redirectTo ? loginUrlWithRedirect(redirectTo) : "/login"}
-          className="font-medium text-primary underline-offset-4 hover:underline"
-        >
-          Masuk
-        </Link>
-        {" · "}
-        <Link
-          href={SHOP_BOOKING_PATH}
-          className="font-medium text-primary underline-offset-4 hover:underline"
-        >
-          Booking
-        </Link>
-      </p>
+        <p className="mt-5 text-center text-sm text-muted-foreground">
+          Sudah punya akun?{" "}
+          <Link
+            href={redirectTo ? loginUrlWithRedirect(redirectTo) : "/login"}
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Masuk
+          </Link>
+          {" · "}
+          <Link
+            href={SHOP_BOOKING_PATH}
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Booking
+          </Link>
+        </p>
+      </SpotlightCard>
     </Reveal>
   );
 }
 
 export default function RegisterPage() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid-soft opacity-70" />
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10 sm:py-14">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid-soft opacity-60"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-primary/[0.09] via-primary/[0.03] to-transparent"
+      />
       <div className="relative z-10 w-full max-w-[26rem]">
         <Suspense
-          fallback={<Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" aria-hidden />}
+          fallback={
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" aria-hidden />
+          }
         >
           <RegisterForm />
         </Suspense>

@@ -74,9 +74,22 @@ export default function BookingsPage() {
 
   useEffect(() => {
     load();
-    // Antrean berubah cepat, jadi disegarkan berkala.
-    const interval = setInterval(load, 15000);
-    return () => clearInterval(interval);
+    // Antrean berubah cepat; jeda polling saat tab tidak terlihat.
+    const tick = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+        return;
+      }
+      void load();
+    };
+    const interval = setInterval(tick, 15000);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") void load();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [load]);
 
   const changeStatus = async (id: string, status: string) => {
