@@ -85,17 +85,17 @@ export default function OverviewPage() {
         description="Angka hari ini di seluruh kanal booking, dari walk-in sampai booking online."
         actions={
           <>
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-muted-foreground" aria-hidden />
+            <div className="flex w-full items-center gap-2 sm:w-auto">
+              <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
               <Input
                 type="date"
                 aria-label="Pilih tanggal"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-auto"
+                className="min-w-0 flex-1 sm:w-auto sm:flex-none"
               />
             </div>
-            <Button type="button" variant="outline" onClick={load}>
+            <Button type="button" variant="outline" onClick={load} className="w-full sm:w-auto">
               <RefreshCw className="mr-1.5 h-4 w-4" aria-hidden />
               Segarkan
             </Button>
@@ -245,22 +245,27 @@ export default function OverviewPage() {
                     Belum ada data jam sibuk.
                   </p>
                 ) : (
-                  <div className="mt-6 flex h-40 items-end gap-1.5">
-                    {data.hourly_distribution.map((slot) => (
-                      <div
-                        key={slot.hour}
-                        className="flex flex-1 flex-col items-center gap-2"
-                        title={`${slot.hour}:00 — ${slot.count} booking`}
-                      >
+                  <div className="mt-6 -mx-1 overflow-x-auto px-1 scrollbar-slim">
+                    <div className="flex h-40 min-w-[280px] items-end gap-1.5 sm:min-w-0">
+                      {data.hourly_distribution.map((slot) => (
                         <div
-                          className="w-full rounded-t-md bg-primary/80 transition-[height] duration-500"
-                          style={{ height: `${(slot.count / maxHour) * 100}%`, minHeight: 4 }}
-                        />
-                        <span className="font-mono text-[10px] text-muted-foreground">
-                          {String(slot.hour).padStart(2, "0")}
-                        </span>
-                      </div>
-                    ))}
+                          key={slot.hour}
+                          className="flex min-w-0 flex-1 flex-col items-center gap-2"
+                          title={`${slot.hour}:00 — ${slot.count} booking`}
+                        >
+                          <div
+                            className="w-full rounded-t-md bg-primary/80 transition-[height] duration-500"
+                            style={{
+                              height: `${(slot.count / maxHour) * 100}%`,
+                              minHeight: 4,
+                            }}
+                          />
+                          <span className="font-mono text-[10px] text-muted-foreground">
+                            {String(slot.hour).padStart(2, "0")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </SpotlightCard>

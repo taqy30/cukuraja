@@ -209,11 +209,13 @@
   html {
     @apply font-sans;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "ss01";
+    overflow-x: clip;
   }
 
   h1,

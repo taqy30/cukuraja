@@ -374,7 +374,7 @@ function BookingPageContent({
               exit={{ opacity: 0, y: -12 }}
               transition={transitionSoft}
             >
-              <SpotlightCard className="p-6" interactive={false}>
+              <SpotlightCard className="p-4 sm:p-6" interactive={false}>
                 <div className="mb-1 flex items-center gap-2">
                   <UserCircle className="h-5 w-5 text-primary" aria-hidden />
                   <h2 className="font-heading font-semibold text-foreground">
@@ -413,7 +413,7 @@ function BookingPageContent({
               exit={{ opacity: 0, y: -12 }}
               transition={transitionSoft}
             >
-              <SpotlightCard className="p-6" interactive={false}>
+              <SpotlightCard className="p-4 sm:p-6" interactive={false}>
                 <div className="mb-4 flex items-center gap-2">
                   <Scissors className="h-5 w-5 text-primary" aria-hidden />
                   <h2 className="font-heading font-semibold text-foreground">
@@ -464,14 +464,14 @@ function BookingPageContent({
               exit={{ opacity: 0, y: -12 }}
               transition={transitionSoft}
             >
-              <SpotlightCard className="p-6" interactive={false}>
+              <SpotlightCard className="p-4 sm:p-6" interactive={false}>
                 <div className="mb-4 flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-primary" aria-hidden />
                   <h2 className="font-heading font-semibold text-foreground">
                     {requiresCapster ? "3. Pilih tanggal" : "2. Pilih tanggal"}
                   </h2>
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-1">
+                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-slim snap-x snap-mandatory -mx-1 px-1">
                   {dates.map((d) => {
                     const formatted = formatDate(d);
                     return (
@@ -479,7 +479,7 @@ function BookingPageContent({
                         key={d}
                         type="button"
                         onClick={() => pickDate(d)}
-                        className={`w-16 flex-shrink-0 py-3 ${pickClass(
+                        className={`w-16 flex-shrink-0 snap-start py-3 ${pickClass(
                           selectedDate === d
                         )}`}
                       >
@@ -508,7 +508,7 @@ function BookingPageContent({
               exit={{ opacity: 0, y: -12 }}
               transition={transitionSoft}
             >
-              <SpotlightCard className="p-6" interactive={false}>
+              <SpotlightCard className="p-4 sm:p-6" interactive={false}>
                 <div className="mb-1 flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" aria-hidden />
                   <h2 className="font-heading font-semibold text-foreground">
@@ -539,19 +539,19 @@ function BookingPageContent({
                     Tidak ada slot tersedia
                   </p>
                 ) : (
-                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
                     {slots.map((slot) => (
                       <button
                         key={slot.time}
                         type="button"
                         disabled={!slot.available}
                         onClick={() => setSelectedTime(slot.time)}
-                        className={`py-2.5 text-sm font-medium ${pickClass(
+                        className={`py-2.5 text-xs font-medium sm:text-sm ${pickClass(
                           selectedTime === slot.time,
                           !slot.available
                         )}`}
                       >
-                        {formatTime12(slot.time)}
+                        {slot.time.slice(0, 5)}
                       </button>
                     ))}
                   </div>
@@ -599,7 +599,7 @@ function BookingPageContent({
                 )}
               </div>
 
-              <SpotlightCard className="p-6" interactive={false}>
+              <SpotlightCard className="p-4 sm:p-6" interactive={false}>
                 <h2 className="mb-4 font-heading font-semibold text-foreground">
                   {requiresCapster ? "5. Data pelanggan" : "4. Data pelanggan"}
                 </h2>

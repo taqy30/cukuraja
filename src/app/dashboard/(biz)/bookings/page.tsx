@@ -160,22 +160,27 @@ export default function BookingsPage() {
         description="Jalankan antrean hari ini, tambahkan walk-in, dan pantau status setiap pelanggan."
         actions={
           <>
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-muted-foreground" aria-hidden />
+            <div className="flex w-full items-center gap-2 sm:w-auto">
+              <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
               <Input
                 type="date"
                 aria-label="Pilih tanggal"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-auto"
+                className="min-w-0 flex-1 sm:w-auto sm:flex-none"
               />
             </div>
-            <Button type="button" variant="outline" onClick={load}>
+            <Button type="button" variant="outline" onClick={load} className="w-full sm:w-auto">
               <RefreshCw className="mr-1.5 h-4 w-4" aria-hidden />
               Segarkan
             </Button>
             {can("booking.create.walkin") && (
-              <Button type="button" variant="secondary" onClick={() => setWalkInOpen(true)}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setWalkInOpen(true)}
+                className="w-full sm:w-auto"
+              >
                 <UserPlus className="mr-1.5 h-4 w-4" aria-hidden />
                 Walk-in
               </Button>
@@ -183,6 +188,7 @@ export default function BookingsPage() {
             {can("booking.update") && (
               <Button
                 type="button"
+                className="w-full sm:w-auto"
                 onClick={() => {
                   setEditing(null);
                   setFormOpen(true);
@@ -205,7 +211,7 @@ export default function BookingsPage() {
         options={[
           { value: "active", label: "Aktif", count: counts.active },
           { value: "completed", label: "Selesai", count: counts.completed },
-          { value: "closed", label: "Batal & lewat", count: counts.closed },
+          { value: "closed", label: "Batal", count: counts.closed },
           { value: "all", label: "Semua", count: counts.all },
         ]}
       />

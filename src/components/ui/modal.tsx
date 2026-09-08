@@ -48,7 +48,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -62,16 +62,16 @@ export function Modal({
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
+            initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 16 }}
             animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
+            exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 16 }}
             transition={transitionSoft}
             className={cn(
-              "relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft-xl)]",
+              "relative flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-2xl border border-border bg-card shadow-[var(--shadow-soft-xl)] sm:max-h-[90vh] sm:rounded-2xl",
               className
             )}
           >
-            <header className="flex items-start justify-between gap-4 border-b border-border px-6 py-4">
+            <header className="flex items-start justify-between gap-4 border-b border-border px-4 py-4 sm:px-6">
               <div className="min-w-0">
                 <h2 className="font-heading text-base font-semibold text-foreground">
                   {title}
@@ -90,10 +90,10 @@ export function Modal({
               </button>
             </header>
 
-            <div className="flex-1 overflow-y-auto px-6 py-5 scrollbar-slim">{children}</div>
+            <div className="flex-1 overflow-y-auto px-4 py-5 scrollbar-slim sm:px-6">{children}</div>
 
             {footer && (
-              <footer className="border-t border-border bg-surface-raised px-6 py-4">
+              <footer className="border-t border-border bg-surface-raised px-4 py-4 sm:px-6">
                 {footer}
               </footer>
             )}

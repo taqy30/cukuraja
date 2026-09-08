@@ -121,27 +121,29 @@ export default function BookingQueue({
               </div>
 
               <div className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
-                <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <p className="flex min-w-0 items-center gap-2 text-sm font-medium text-foreground">
                   <User className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                  {booking.customer_name}
+                  <span className="truncate">{booking.customer_name}</span>
                 </p>
-                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                <p className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
                   <Phone className="h-4 w-4 shrink-0" aria-hidden />
-                  {booking.customer_phone}
+                  <span className="truncate">{booking.customer_phone}</span>
                 </p>
                 {booking.service?.name && (
-                  <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <p className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
                     <Scissors className="h-4 w-4 shrink-0" aria-hidden />
-                    {booking.service.name}
-                    {booking.service.duration_minutes
-                      ? ` · ${booking.service.duration_minutes} menit`
-                      : ""}
+                    <span className="truncate">
+                      {booking.service.name}
+                      {booking.service.duration_minutes
+                        ? ` · ${booking.service.duration_minutes} menit`
+                        : ""}
+                    </span>
                   </p>
                 )}
                 {showCapster && booking.capster?.name && (
-                  <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <p className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
                     <Scissors className="h-4 w-4 shrink-0" aria-hidden />
-                    Capster: {booking.capster.name}
+                    <span className="truncate">Capster: {booking.capster.name}</span>
                   </p>
                 )}
               </div>
@@ -154,40 +156,43 @@ export default function BookingQueue({
               )}
 
               {(actions.length > 0 || onEdit || onDelete) && (
-                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+                <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4 sm:flex-row sm:flex-wrap sm:items-center">
                   {isUpdating && (
                     <Loader2 className="h-4 w-4 animate-spin text-primary" aria-hidden />
                   )}
 
-                  {actions.map((action) => (
-                    <Button
-                      key={action.status}
-                      type="button"
-                      size="sm"
-                      variant={action.variant ?? "default"}
-                      disabled={isUpdating}
-                      onClick={() => onStatusChange(booking.id, action.status)}
-                    >
-                      <action.icon className="mr-1.5 h-4 w-4" aria-hidden />
-                      {action.label}
-                    </Button>
-                  ))}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {actions.map((action) => (
+                      <Button
+                        key={action.status}
+                        type="button"
+                        size="sm"
+                        variant={action.variant ?? "default"}
+                        disabled={isUpdating}
+                        onClick={() => onStatusChange(booking.id, action.status)}
+                        className="flex-1 sm:flex-none"
+                      >
+                        <action.icon className="mr-1.5 h-4 w-4" aria-hidden />
+                        {action.label}
+                      </Button>
+                    ))}
 
-                  {CANCELLABLE.includes(booking.status) && (
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      disabled={isUpdating}
-                      onClick={() => onStatusChange(booking.id, "cancelled")}
-                      className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                    >
-                      <XCircle className="mr-1.5 h-4 w-4" aria-hidden />
-                      Batalkan
-                    </Button>
-                  )}
+                    {CANCELLABLE.includes(booking.status) && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        disabled={isUpdating}
+                        onClick={() => onStatusChange(booking.id, "cancelled")}
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <XCircle className="mr-1.5 h-4 w-4" aria-hidden />
+                        Batalkan
+                      </Button>
+                    )}
+                  </div>
 
-                  <div className="ml-auto flex items-center gap-1">
+                  <div className="flex items-center justify-end gap-1 sm:ml-auto">
                     {onEdit && (
                       <Button
                         type="button"

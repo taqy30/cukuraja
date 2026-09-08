@@ -129,12 +129,12 @@ export default async function PublicShopPage({ params }: Props) {
             {(services ?? []).map((service) => (
               <div
                 key={service.id}
-                className="flex items-center justify-between gap-4 p-6 transition-colors hover:bg-muted/40"
+                className="flex flex-col gap-4 p-5 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-6"
               >
                 <div className="min-w-0 flex-1">
                   <h3 className="font-medium text-foreground">{service.name}</h3>
                   {service.description && (
-                    <p className="mt-0.5 text-sm text-muted-foreground">
+                    <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">
                       {service.description}
                     </p>
                   )}
@@ -154,7 +154,10 @@ export default async function PublicShopPage({ params }: Props) {
                   href={loginUrlWithRedirect(
                     `/${slug}/booking?service=${service.id}`
                   )}
-                  className={buttonVariants({ variant: "secondary", size: "sm" })}
+                  className={cn(
+                    buttonVariants({ variant: "secondary", size: "sm" }),
+                    "w-full shrink-0 sm:w-auto"
+                  )}
                 >
                   Booking
                   <ArrowRight className="ml-1 h-4 w-4" aria-hidden />

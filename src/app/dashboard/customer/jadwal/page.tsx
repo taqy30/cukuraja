@@ -188,7 +188,7 @@ export default function CustomerSchedulePage() {
               </span>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6">
               {slots.map((slot) => (
                 <div
                   key={slot.time}

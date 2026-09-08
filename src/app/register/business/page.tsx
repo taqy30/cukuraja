@@ -83,7 +83,7 @@ export default function RegisterBusinessPage() {
           </p>
         </div>
 
-        <SpotlightCard className="mt-6 p-6" interactive={false}>
+        <SpotlightCard className="mt-6 p-4 sm:p-6" interactive={false}>
           <form onSubmit={handleSubmit} className="space-y-4">
             <FormError message={error} />
 
@@ -207,7 +207,7 @@ export default function RegisterBusinessPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="open-time">Buka</Label>
                 <Input

@@ -175,7 +175,7 @@ export default function HeroParallaxVideo({ children }: Props) {
 
   return (
     <section ref={containerRef} className="relative h-[620svh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-end overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32 lg:justify-center lg:pb-28 lg:pt-36">
+      <div className="sticky top-0 flex h-[100svh] max-h-[100dvh] flex-col justify-center overflow-y-auto overflow-x-hidden pb-10 pt-24 sm:justify-end sm:pb-24 sm:pt-32 lg:justify-center lg:pb-28 lg:pt-36">
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden bg-[#0a0a0a]">
           <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
           {!ready && (

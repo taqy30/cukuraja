@@ -214,18 +214,18 @@ export default function CustomerDashboardShell({
       </AnimatePresence>
 
       <div className="flex min-w-0 flex-1 flex-col lg:ml-64">
-        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur lg:hidden">
+        <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-background/85 px-3 pt-[env(safe-area-inset-top)] backdrop-blur sm:h-16 sm:gap-3 sm:px-4 lg:hidden">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
             aria-label="Buka menu"
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted"
           >
             <Menu className="h-5 w-5" aria-hidden />
           </button>
-          {brand}
+          <div className="min-w-0 flex-1">{brand}</div>
         </header>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 overflow-x-hidden p-3 sm:p-4 md:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

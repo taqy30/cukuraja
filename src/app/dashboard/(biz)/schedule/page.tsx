@@ -140,17 +140,17 @@ export default function SchedulePage() {
           description="Slot per jam. Tandai berhalangan jika tidak bisa melayani — kasir tidak bisa walk-in di jam itu."
           actions={
             <>
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-muted-foreground" aria-hidden />
+              <div className="flex w-full items-center gap-2 sm:w-auto">
+                <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                 <Input
                   type="date"
                   aria-label="Pilih tanggal"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-auto"
+                  className="min-w-0 flex-1 sm:w-auto sm:flex-none"
                 />
               </div>
-              <Button type="button" variant="outline" onClick={load}>
+              <Button type="button" variant="outline" onClick={load} className="w-full sm:w-auto">
                 <RefreshCw className="mr-1.5 h-4 w-4" aria-hidden />
                 Segarkan
               </Button>

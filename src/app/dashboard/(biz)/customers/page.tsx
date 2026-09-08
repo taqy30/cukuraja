@@ -196,7 +196,74 @@ export default function CustomersPage() {
         />
       ) : (
         <Reveal>
-          <SpotlightCard className="overflow-hidden p-0" interactive={false}>
+          <>
+            <div className="space-y-3 md:hidden">
+              {filtered.map((customer) => (
+                <SpotlightCard key={customer.id} className="p-4" interactive={false}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium text-foreground">{customer.name}</p>
+                      <p className="mt-0.5 truncate text-sm text-muted-foreground">
+                        {customer.phone || "—"}
+                      </p>
+                    </div>
+                    <span
+                      className="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium"
+                      style={{
+                        backgroundColor:
+                          customer.type === "registered"
+                            ? "var(--status-completed-bg)"
+                            : "var(--muted)",
+                        color:
+                          customer.type === "registered"
+                            ? "var(--status-completed)"
+                            : "var(--muted-foreground)",
+                      }}
+                    >
+                      {customer.type === "registered" ? "Member" : "Non-member"}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <span>
+                      Booking{" "}
+                      <strong className="font-mono text-foreground">{customer.bookings}</strong>
+                    </span>
+                    <span>
+                      Selesai{" "}
+                      <strong className="font-mono text-foreground">{customer.completed}</strong>
+                    </span>
+                    <span>Terakhir {formatDate(customer.lastVisit)}</span>
+                  </div>
+                  {canManage && (
+                    <div className="mt-3 flex items-center justify-end gap-1 border-t border-border pt-3">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        aria-label={`Ubah ${customer.name}`}
+                        onClick={() => openEdit(customer)}
+                      >
+                        <Pencil className="mr-1.5 h-4 w-4" aria-hidden />
+                        Ubah
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        aria-label={`Hapus ${customer.name}`}
+                        onClick={() => remove(customer)}
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <Trash2 className="mr-1.5 h-4 w-4" aria-hidden />
+                        Hapus
+                      </Button>
+                    </div>
+                  )}
+                </SpotlightCard>
+              ))}
+            </div>
+
+            <SpotlightCard className="hidden overflow-hidden p-0 md:block" interactive={false}>
             <div className="overflow-x-auto scrollbar-slim">
               <table className="w-full min-w-[720px] text-sm">
                 <thead className="border-b border-border bg-surface-raised">
@@ -289,6 +356,7 @@ export default function CustomersPage() {
               </table>
             </div>
           </SpotlightCard>
+          </>
         </Reveal>
       )}
 

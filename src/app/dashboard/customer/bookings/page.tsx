@@ -57,7 +57,7 @@ export default async function CustomerBookingsPage() {
         title="Booking Saya"
         description={`Riwayat reservasi online di ${BRAND_NAME}. Walk-in non-member tidak muncul di sini.`}
         actions={
-          <Button asChild>
+          <Button asChild className="w-full sm:w-auto">
             <Link href={SHOP_BOOKING_PATH}>
               <CalendarPlus className="mr-1.5 h-4 w-4" aria-hidden />
               Booking baru

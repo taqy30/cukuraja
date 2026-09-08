@@ -104,7 +104,7 @@ export default function ConfirmHost() {
   return (
     <AnimatePresence>
       {pending && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -121,11 +121,11 @@ export default function ConfirmHost() {
             aria-modal="true"
             aria-labelledby="confirm-title"
             aria-describedby={pending.description ? "confirm-desc" : undefined}
-            initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
+            initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 16 }}
             animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
+            exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 16 }}
             transition={transitionSoft}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft-xl)]"
+            className="relative w-full max-w-md overflow-hidden rounded-t-2xl border border-border bg-card shadow-[var(--shadow-soft-xl)] sm:rounded-2xl"
           >
             <div className="p-6">
               <div className="flex gap-3">
@@ -172,6 +172,7 @@ export default function ConfirmHost() {
                   <Button
                     type="button"
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => close(false)}
                   >
                     {pending.cancelLabel ?? "Batal"}
@@ -181,7 +182,7 @@ export default function ConfirmHost() {
                   type="button"
                   variant={pending.danger ? "destructive" : "default"}
                   onClick={() => close(true)}
-                  className={pending.alert ? "w-full sm:w-auto" : undefined}
+                  className="w-full sm:w-auto"
                 >
                   {pending.confirmLabel ?? (pending.alert ? "OK" : "Lanjutkan")}
                 </Button>

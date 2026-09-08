@@ -114,7 +114,7 @@ export default function CapsterHourGrid({
         </p>
       )}
 
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
         {slots.map((slot) => {
           const busy = busyTime === slot.time;
           return (

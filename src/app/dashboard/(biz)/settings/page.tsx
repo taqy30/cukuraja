@@ -220,8 +220,8 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="mt-auto flex items-center gap-3 pt-6">
-              <Button type="submit" disabled={saving}>
+            <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:items-center">
+              <Button type="submit" disabled={saving} className="w-full sm:w-auto">
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />}
                 Simpan pengaturan
               </Button>

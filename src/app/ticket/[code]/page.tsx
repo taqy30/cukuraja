@@ -143,7 +143,7 @@ export default function TicketPage({
               <Scissors className="h-4 w-4" aria-hidden />
               <span>{booking.business?.name ?? "Cukuraja"}</span>
             </div>
-            <div className="font-heading text-4xl font-bold tracking-wider">
+            <div className="font-heading text-3xl font-bold tracking-wider sm:text-4xl">
               {booking.booking_code}
             </div>
             <div className="mt-4 flex justify-center">

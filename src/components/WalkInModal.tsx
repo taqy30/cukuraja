@@ -242,7 +242,7 @@ export default function WalkInModal({
           ) : slots.length === 0 ? (
             <p className="text-sm text-muted-foreground">Pilih capster untuk melihat jam.</p>
           ) : (
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
               {slots.map((slot) => {
                 const selected = form.booking_time === slot.time;
                 return (

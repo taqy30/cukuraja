@@ -54,21 +54,21 @@ export default function LandingPage() {
         </Reveal>
 
         <Reveal delay={0.06}>
-          <h1 className="mt-4 max-w-3xl font-heading text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-8xl lg:leading-[0.98]">
+          <h1 className="mt-4 max-w-3xl font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-8xl lg:leading-[0.98]">
             {BRAND_NAME_HTML.prefix}
             <span className="text-white/75">{BRAND_NAME_HTML.accent}</span>
           </h1>
         </Reveal>
 
         <Reveal delay={0.12}>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75 sm:text-xl">
+          <p className="mt-5 max-w-md text-base leading-relaxed text-white/75 sm:text-lg md:text-xl">
             Potong rapi. Booking dari HP. Datang tanpa antre lama.
           </p>
         </Reveal>
 
         <Reveal delay={0.18}>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild size="lg" className="h-12 px-6 text-base">
+          <div className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:items-center">
+            <Button asChild size="lg" className="h-12 w-full px-6 text-base sm:w-auto">
               <Link href={SHOP_BOOKING_PATH}>
                 Booking sekarang
                 <ArrowRight
@@ -81,7 +81,7 @@ export default function LandingPage() {
               asChild
               variant="outline"
               size="lg"
-              className="h-12 border-white/30 bg-transparent px-6 text-base text-white hover:bg-white/10 hover:text-white"
+              className="h-12 w-full border-white/30 bg-transparent px-6 text-base text-white hover:bg-white/10 hover:text-white sm:w-auto"
             >
               <a href="#layanan">Lihat layanan</a>
             </Button>
@@ -107,17 +107,18 @@ export default function LandingPage() {
           >
             {SERVICES.map((service) => (
               <StaggerItem key={service.name}>
-                <div className="group grid grid-cols-[1fr_auto] items-baseline gap-x-6 gap-y-1 py-6 transition-colors duration-200 hover:bg-secondary/40 sm:grid-cols-[minmax(0,1fr)_8rem_6.5rem] sm:px-2">
-                  <div>
+                <div className="group grid grid-cols-1 items-baseline gap-x-4 gap-y-1 py-6 transition-colors duration-200 hover:bg-secondary/40 sm:grid-cols-[minmax(0,1fr)_8rem_6.5rem] sm:gap-x-6 sm:px-2">
+                  <div className="min-w-0">
                     <p className="font-heading text-lg font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
                       {service.name}
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">{service.desc}</p>
+                    <p className="mt-1 text-xs text-muted-foreground sm:hidden">{service.dur}</p>
                   </div>
                   <p className="hidden text-sm text-muted-foreground sm:block sm:text-right">
                     {service.dur}
                   </p>
-                  <p className="text-right font-heading text-base font-semibold text-primary">
+                  <p className="font-heading text-base font-semibold text-primary sm:text-right">
                     {service.price}
                   </p>
                 </div>

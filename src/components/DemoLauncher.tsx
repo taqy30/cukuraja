@@ -22,7 +22,7 @@ export default function DemoLauncher() {
   }, [open]);
 
   return (
-    <div className="pointer-events-none fixed bottom-5 left-5 z-[100] sm:bottom-6 sm:left-6">
+    <div className="pointer-events-none fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-[100] sm:bottom-6 sm:left-6">
       <AnimatePresence>
         {open && (
           <motion.div
