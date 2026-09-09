@@ -49,6 +49,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/llms.txt",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "text/markdown; charset=utf-8",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400",
+          },
+        ],
+      },
+      {
         source: "/videos/scissors-frames/:path*",
         headers: [
           {

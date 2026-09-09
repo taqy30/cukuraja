@@ -1,0 +1,18 @@
+# Cukuraja
+
+> Cukuraja is a modern barbershop web app with online booking and a digital queue. Customers book services, pick a barber and time slot, then arrive with a booking code. Staff manage walk-ins, live queues, schedules, services, and settings through a role-based dashboard.
+
+This is a personal demo project. It is actively maintained and improved over time.
+
+## Pages
+
+- [Home](https://cukuraja.vercel.app/): Landing page for Cukuraja barbershop
+- [Shop](https://cukuraja.vercel.app/cukuraja): Public shop page with services and barbers
+- [Online booking](https://cukuraja.vercel.app/cukuraja/booking): Member booking flow (capster, service, schedule)
+- [Login](https://cukuraja.vercel.app/login): Sign in for staff and customers
+- [Register](https://cukuraja.vercel.app/register): Create a customer member account
+- [Dashboard](https://cukuraja.vercel.app/dashboard): Role-based operations dashboard
+
+## Optional
+
+- [GitHub repository](https://github.com/taqy30/cukuraja): Source code for this personal demo

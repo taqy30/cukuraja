@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   ArrowRight,
   CalendarDays,
@@ -10,7 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LandingSmoothScroll from "@/components/marketing/LandingSmoothScroll";
 import HeroParallaxVideo from "@/components/marketing/HeroParallaxVideo";
-import SectionParallax from "@/components/marketing/SectionParallax";
 import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import {
@@ -20,6 +20,10 @@ import {
   SHOP_BOOKING_PATH,
   SHOP_PATH,
 } from "@/lib/brand";
+
+const SectionParallax = dynamic(
+  () => import("@/components/marketing/SectionParallax")
+);
 
 const SERVICES = [
   { name: "Haircut", desc: "Potong sesuai model", price: "Rp35.000", dur: "30 mnt" },

@@ -7,11 +7,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-/** Sequence gunting 10s@30fps → 303 WebP. Desktop scrub; mobile pakai 1 frame (performa). */
+/** Sequence gunting 10s@30fps → 303 WebP. Scrub desktop on-demand; mobile 1 frame. */
 const FRAME_START = 1;
 const FRAME_END = 303;
 const FRAME_PAD = 3;
 const LOAD_CONCURRENCY = 4;
+const FRAME_STEP = 3;
 const FIRST_SRC = `/videos/scissors-frames/${String(FRAME_START).padStart(FRAME_PAD, "0")}.webp`;
 
 function frameSrc(fileNumber: number) {
@@ -36,8 +37,9 @@ function loadImage(src: string) {
 }
 
 /**
- * Hero sticky + scrub frame WebP (desktop).
- * Mobile / reduced-motion: satu gambar statis — LCP & network jauh lebih ringan.
+ * Hero sticky + scrub WebP.
+ * - Mobile / reduced-motion: gambar statis (desain sama, tanpa beban scrub)
+ * - Desktop: scrub hanya setelah user scroll (aman untuk PageSpeed, efek tetap ada)
  */
 export default function HeroParallaxVideo({ children }: Props) {
   const containerRef = useRef<HTMLElement>(null);
@@ -45,7 +47,7 @@ export default function HeroParallaxVideo({ children }: Props) {
   const framesRef = useRef<HTMLImageElement[]>([]);
   const progressRef = useRef(0);
   const rafRef = useRef(0);
-  const [mode, setMode] = useState<"static" | "scrub" | null>(null);
+  const [scrubActive, setScrubActive] = useState(false);
   const reduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -54,28 +56,27 @@ export default function HeroParallaxVideo({ children }: Props) {
   });
 
   useEffect(() => {
+    if (reduced) return;
+
     const mobile = window.matchMedia("(max-width: 768px)").matches;
-    if (reduced || mobile) {
-      setMode("static");
-      return;
-    }
+    if (mobile) return;
 
     let cancelled = false;
-    let restStarted = false;
-    let timeoutId = 0;
-    let idleId: number | null = null;
-    const loaded: HTMLImageElement[] = [];
-    const numbers = buildFrameNumbers(2);
+    let started = false;
 
-    const stopKick = () => {
-      window.removeEventListener("scroll", onScrollKick);
-      window.clearTimeout(timeoutId);
-      if (idleId != null && "cancelIdleCallback" in window) {
-        window.cancelIdleCallback(idleId);
-      }
-    };
+    const loadSequence = async () => {
+      if (started || cancelled) return;
+      started = true;
 
-    const loadRest = async () => {
+      const numbers = buildFrameNumbers(FRAME_STEP);
+      const loaded: HTMLImageElement[] = [];
+
+      const first = await loadImage(FIRST_SRC);
+      if (cancelled) return;
+      loaded.push(first);
+      framesRef.current = [first];
+      setScrubActive(true);
+
       for (let i = 1; i < numbers.length; i += LOAD_CONCURRENCY) {
         if (cancelled) return;
         const batch = numbers.slice(i, i + LOAD_CONCURRENCY);
@@ -86,40 +87,22 @@ export default function HeroParallaxVideo({ children }: Props) {
       }
     };
 
-    const startRest = () => {
-      if (restStarted || cancelled) return;
-      restStarted = true;
-      stopKick();
-      void loadRest();
+    const onScroll = () => {
+      if (window.scrollY > 12) {
+        window.removeEventListener("scroll", onScroll);
+        void loadSequence();
+      }
     };
 
-    const onScrollKick = () => {
-      if (window.scrollY > 24) startRest();
-    };
-
-    void (async () => {
-      const first = await loadImage(FIRST_SRC);
-      if (cancelled) return;
-      loaded.push(first);
-      framesRef.current = [first];
-      setMode("scrub");
-
-      window.addEventListener("scroll", onScrollKick, { passive: true });
-      idleId =
-        "requestIdleCallback" in window
-          ? window.requestIdleCallback(startRest, { timeout: 4000 })
-          : null;
-      timeoutId = window.setTimeout(startRest, 3000);
-    })();
-
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       cancelled = true;
-      stopKick();
+      window.removeEventListener("scroll", onScroll);
     };
   }, [reduced]);
 
   useEffect(() => {
-    if (mode !== "scrub") return;
+    if (!scrubActive) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -188,33 +171,33 @@ export default function HeroParallaxVideo({ children }: Props) {
       window.removeEventListener("resize", onResize);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [mode, scrollYProgress]);
+  }, [scrubActive, scrollYProgress]);
 
   return (
     <section
       ref={containerRef}
-      className={
-        mode === "scrub" ? "relative h-[620svh]" : "relative min-h-[100svh] md:h-[620svh]"
-      }
+      className="relative min-h-[100svh] md:h-[620svh]"
     >
       <div className="sticky top-0 flex h-[100svh] max-h-[100dvh] flex-col justify-center overflow-y-auto overflow-x-hidden pb-10 pt-24 sm:justify-end sm:pb-24 sm:pt-32 lg:justify-center lg:pb-28 lg:pt-36">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden bg-[#0a0a0a]"
         >
-          {mode === "scrub" ? (
+          {/* Poster LCP selalu ada; canvas overlay saat scrub aktif */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={FIRST_SRC}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            width={1920}
+            height={1080}
+            className={`absolute inset-0 h-full w-full scale-105 object-cover transition-opacity duration-300 ${
+              scrubActive ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          {scrubActive && (
             <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={FIRST_SRC}
-              alt=""
-              fetchPriority="high"
-              decoding="async"
-              width={1920}
-              height={1080}
-              className="absolute inset-0 h-full w-full scale-105 object-cover"
-            />
           )}
 
           <div className="absolute inset-0 bg-black/55" />
