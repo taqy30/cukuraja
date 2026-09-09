@@ -16,12 +16,28 @@ export default function DemoLauncherHost({ enabled }: { enabled: boolean }) {
     }
 
     let cancelled = false;
-    void import("@/components/DemoLauncher").then((mod) => {
-      if (!cancelled) setLauncher(() => mod.default);
-    });
+    let idleId: number | null = null;
+    let timeoutId = 0;
+
+    const load = () => {
+      void import("@/components/DemoLauncher").then((mod) => {
+        if (!cancelled) setLauncher(() => mod.default);
+      });
+    };
+
+    // Jangan bersaing dengan LCP hero di first paint.
+    idleId =
+      "requestIdleCallback" in window
+        ? window.requestIdleCallback(load, { timeout: 3000 })
+        : null;
+    timeoutId = window.setTimeout(load, 2000);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timeoutId);
+      if (idleId != null && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
     };
   }, [enabled]);
 

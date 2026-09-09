@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +20,8 @@ const TONE: Record<Tone, string> = {
 };
 
 /**
- * Section konten + parallax ringan.
- * Tanpa orb blur / garis gradient neon.
+ * Section konten + parallax ringan (desktop saja, setelah mount).
+ * Mobile / SSR: static — hemat main-thread.
  */
 export default function SectionParallax({
   id,
@@ -31,6 +31,19 @@ export default function SectionParallax({
 }: Props) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+  const [enableParallax, setEnableParallax] = useState(false);
+
+  useEffect(() => {
+    if (reduced) {
+      setEnableParallax(false);
+      return;
+    }
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setEnableParallax(!mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [reduced]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -49,12 +62,13 @@ export default function SectionParallax({
         className
       )}
     >
-      <motion.div
-        style={reduced ? undefined : { y: yContent }}
-        className="relative z-10"
-      >
-        {children}
-      </motion.div>
+      {enableParallax ? (
+        <motion.div style={{ y: yContent }} className="relative z-10">
+          {children}
+        </motion.div>
+      ) : (
+        <div className="relative z-10">{children}</div>
+      )}
     </section>
   );
 }

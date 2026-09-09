@@ -43,50 +43,49 @@ const STEPS = [
 export default function LandingPage() {
   return (
     <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+      {/* LCP: preload first hero frame only */}
+      <link
+        rel="preload"
+        as="image"
+        href="/videos/scissors-frames/001.webp"
+        fetchPriority="high"
+      />
       <LandingSmoothScroll />
       <Navbar />
 
       <HeroParallaxVideo>
-        <Reveal>
-          <p className="text-sm font-medium tracking-[0.16em] text-white/70 uppercase">
-            {BRAND_TAGLINE}
-          </p>
-        </Reveal>
+        <p className="text-sm font-medium tracking-[0.16em] text-white/70 uppercase">
+          {BRAND_TAGLINE}
+        </p>
 
-        <Reveal delay={0.06}>
-          <h1 className="mt-4 max-w-3xl font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-8xl lg:leading-[0.98]">
-            {BRAND_NAME_HTML.prefix}
-            <span className="text-white/75">{BRAND_NAME_HTML.accent}</span>
-          </h1>
-        </Reveal>
+        <h1 className="mt-4 max-w-3xl font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-8xl lg:leading-[0.98]">
+          {BRAND_NAME_HTML.prefix}
+          <span className="text-white/75">{BRAND_NAME_HTML.accent}</span>
+        </h1>
 
-        <Reveal delay={0.12}>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-white/75 sm:text-lg md:text-xl">
-            Potong rapi. Booking dari HP. Datang tanpa antre lama.
-          </p>
-        </Reveal>
+        <p className="mt-5 max-w-md text-base leading-relaxed text-white/75 sm:text-lg md:text-xl">
+          Potong rapi. Booking dari HP. Datang tanpa antre lama.
+        </p>
 
-        <Reveal delay={0.18}>
-          <div className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:items-center">
-            <Button asChild size="lg" className="h-12 w-full px-6 text-base sm:w-auto">
-              <Link href={SHOP_BOOKING_PATH}>
-                Booking sekarang
-                <ArrowRight
-                  className="ml-2 h-4 w-4 transition-transform duration-200 group-hover/button:translate-x-0.5"
-                  aria-hidden
-                />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="h-12 w-full border-white/30 bg-transparent px-6 text-base text-white hover:bg-white/10 hover:text-white sm:w-auto"
-            >
-              <a href="#layanan">Lihat layanan</a>
-            </Button>
-          </div>
-        </Reveal>
+        <div className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:items-center">
+          <Button asChild size="lg" className="h-12 w-full px-6 text-base sm:w-auto">
+            <Link href={SHOP_BOOKING_PATH}>
+              Booking sekarang
+              <ArrowRight
+                className="ml-2 h-4 w-4 transition-transform duration-200 group-hover/button:translate-x-0.5"
+                aria-hidden
+              />
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="h-12 w-full border-white/30 bg-transparent px-6 text-base text-white hover:bg-white/10 hover:text-white sm:w-auto"
+          >
+            <a href="#layanan">Lihat layanan</a>
+          </Button>
+        </div>
       </HeroParallaxVideo>
 
       <SectionParallax id="layanan" tone="light" className="py-20 sm:py-28">

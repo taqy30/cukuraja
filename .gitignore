@@ -46,3 +46,6 @@ next-env.d.ts
 # large source video (keep webp frames)
 public/videos/*.mp4
 public/videos/**/*.mp4
+public/videos/scissors-frames/_raw/
+public/videos/scissors-frames/_new_raw/
+public/videos/scissors-frames/_incoming/
